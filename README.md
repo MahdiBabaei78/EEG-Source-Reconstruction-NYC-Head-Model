@@ -14,7 +14,8 @@ version 3 of the License, or (at your option) any later version.
 The functions in the "EEG-Source-Reconstruction-NYC-Head-Model" repository are copyrighted by their 
 respective authors: 
 
-- Mahdi Babaei, Sharif University of Technology, Tehran, Iran 			- mahdi78babaei@gmail.com 
+- Mahdi Babaei, Sharif University of Technology, Tehran, Iran 			- mahdi78babaei@gmail.com (prefered)
+                                                                    - babaei.mahdi@ee.sharif.edu
 
 - Bjørn Erik Juel, University of Oslo, Oslo, Norway 				- b.e.juel@medisin.uio.no
 
