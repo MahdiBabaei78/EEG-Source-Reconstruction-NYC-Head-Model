@@ -1,0 +1,190 @@
+%%%%%%%%%%%%%%%%%%% A Thorough Review of the Scripts %%%%%%%%%%%%%%%%%%%
+
+DESCRIPTION OF EACH FUNCTION:
+
+1. Main_Script: This script follows a conventional approach to analyzing EEG data and can serve as a tutorial. 
+It includes an input step where the EEG data is selected, the NYC head model is loaded, and the paths of functions
+and toolboxes are provided as input. There are two remaining sections:
+
+   - The first section is for analyzing spontaneous data (e.g., resting-state EEG). Initially, the available channels
+   in the data are displayed. Then, desired configurations are set, and the data is analyzed.
+
+   - The second section is used to analyze evoked data (e.g., ERP EEG). Here, the events and available channels are 
+   displayed, and the data is analyzed with user-defined configurations.
+
+#################################################################################################################
+
+2. Show_EEGdata_Channels:
+   - Input: Dataset Name, Dataset Path
+   - Output: A list of channels' names will be displayed in the command window
+   
+   - Description: This function shows the available channels in the EEG dataset which can be selected to be used 
+   or removed in further steps.
+   
+#################################################################################################################
+
+3. Show_EEGdata_Events:
+   - Input: Dataset Name, Dataset Path, The period to select before the trigger, The period to select after the trigger
+   - Output: Event Type (e.g., annotation in .edf files), Event Name, Index of Events
+   
+   - Description: In an EEG dataset containing different events, this function extracts the events and their indices. 
+   For example, in [1,1,2,1,2], there are two events. The indices of the first event are 1, 2, & 4 and the indices of 
+   the second event are 3 & 5. These are the inputs of the Evoked_Analysis function.
+
+#################################################################################################################
+
+4. Spont_Analysis:
+   - Input: Dataset Name, Dataset Path, The NYC Head model, Window Length, Overlap of Windows, Frequency Range, 
+   Resolution Number of the NYC Head Model, Flag of Spontaneous or Evoked Data, Flag of Selecting a Subset of Channels, 
+   The Channel Indices to be Selected, Flag of indicating Lambda regularization term in eLoreta, The characters before 
+   the conventional channel name, The characters after the conventional channel name
+   - Output: Dipoles' powers, Position of dipoles in 3D space, A binary variable to indicate which dipoles are inside 
+   and which dipoles are outside, Triangles to create the surface of the brain using the dipoles, Frequencies in which 
+   the dipoles' powers were calculated
+   
+   - Description: In continuous EEG data (without any trials), this function creates trials according to the indicated
+   window length and overlap. The unit of the window length and overlap is in seconds. Then, the "intersection" of the 
+   selected channels in the EEG data and the channels available in the NYC head model will be calculated. If any of the
+   channels were not available in the NYC model, they will be removed from the EEG dataset. Next, the EEG data will be 
+   converted to a format to be read by the FieldTrip toolbox. Then, the NYC head model will be prepared. Next, the power
+   and cross-spectral density will be calculated from the EEG data, using the multitaper FFT method and a Hanning window
+   in the indicated frequency range. Finally, the spatial filters will be calculated from the lead fields available in 
+   the NYC model using a modified version of the ft_inverse_eloreta function.
+
+#################################################################################################################
+
+5. Evoked_Analysis:
+   - Input: Dataset Name, Dataset Path, The NYC Head model, Window Length, Step of Moving Forward in Windows, 
+   Frequency Range, Resolution Number of the NYC Head Model, Flag of Spontaneous or Evoked Data, Flag of Selecting 
+   a Subset of Channels, The Channel Indices to be Selected, Flag of indicating Lambda regularization term in 
+   eLoreta, The characters before the conventional channel name, The characters after the conventional channel name,
+   Analysis type, Index of the events, Event type, An integer indicating the favorite event, Event name, The signal 
+   to be selected before the trigger, The signal to be selected after the trigger
+   - Output: Dipoles' powers, Position of dipoles in 3D space, A binary variable to indicate which dipoles are inside
+   and which dipoles are outside, Triangles to create the surface of the brain using the dipoles, Times of each sample
+   in each window, Frequencies in which the dipoles' powers were calculated
+   
+   - Description: In EEG data with different events, this function creates trials according to the indicated period 
+   to be selected before and after the trigger of a specific event. Then, the "intersection" of the selected channels
+   in the EEG data and the channels available in the NYC head model will be calculated. If any of the channels were not
+   available in the NYC model, they will be removed from the EEG dataset. Next, the EEG data will be converted to a 
+   format to be read by the FieldTrip toolbox. Then, the NYC head model will be prepared. Next, the beginning sample 
+   and the ending sample of the windows will be calculated according to the indicated window length and step. Then, 
+   the spatial filters will be calculated from the lead fields available in the NYC model using a modified version of
+   the ft_inverse_eloreta function. Finally, each window of the trials is selected in a loop. In analysis type 1, the
+   power and cross-spectral density will be calculated from the selected EEG data, using the multitaper FFT method and
+   a Hanning window in the indicated frequency range. Then, the resulting covariance matrices will be used to calculate
+   the dipoles' powers utilizing a modified version of the ft_inverse_eloreta function. In analysis type 2, a timelock
+   analysis will be applied to the selected window, and the resulting covariance matrices will be used to calculate the
+   dipoles' powers.
+   
+#################################################################################################################
+
+6. Prepare_Channels:
+   - Input: The NYC head model, The characters before the conventional channel name, The characters after the 
+   conventional channel name, The selected channels to be used in the EEG dataset, Header file
+   - Output: Channels available both in the EEG dataset and the NYC model, Modified version of the NYC channels
+   
+   - Description: This function stores the channels available in both the NYC model and the EEG dataset in the
+   'channel' variable. Usually, there are some characters before and after the channel names. For example, in 
+   the NYC model, there is a channel named 'Cz'. When the EEG data is stored in .edf format, this channel might
+   have the name 'EEG Cz-Ref'. In this example, pref = 'EEG ' and suf = '-Ref'. These characters will be added 
+   to the NYC channel names to make it easier to find the same channels in other functions.
+
+#################################################################################################################
+
+*7. Prepare_NYC_Head_Model:
+   - Input: The Channels available in both the NYC model and the EEG dataset, The modified NYC channel names,
+   The NYC head model matrix, Desired resolution name
+   - Output: A struct containing the dipole positions, labels indicating whether they are inside or outside,
+   and the triangles defined with the dipoles
+   
+   - Description: This function selects a subset of dipoles and their corresponding leadfield matrices. There
+   are subsets of points available in the NYC model, which indicates that those points should be considered as
+   a whole to downsample the model. In each subset, the Euclidean mean is calculated, and the nearest point to
+   the mean is selected as a substitute for all of the points in the corresponding subset. The leadfield matrix
+   elements containing the conductance of the path between these selected points and the selected channels would
+   be stored separately. Because all of these dipoles are inside the brain, dipin.inside = ones(dipoles).
+
+#################################################################################################################
+
+8. Prepare_Windows:
+   - Input: Window length, Step of moving forward, Trial length, Sampling rate
+   - Output: The beginning and ending sample of each window
+   
+   - Description: This function calculates the moving windows beginning and ending sample to select the data within
+   it. For example, if the trial length is 2 seconds, the window length is 1 with a step of 0.5, and the sampling 
+   rate is 1000 Hz, the output would be a 3*2 matrix as follows [1,1000;501,1500;1001,2000;]. The last window would
+   have been less than the indicated window length if the trial length was 1.9.
+
+#################################################################################################################
+
+9. eLORETA_filt:
+   - Input: NYC dipoles (and some options, e.g., use the provided lead fields and lambda)
+   
+   - Description: The ft_inverse_eloreta function in the FieldTrip toolbox first calculates the spatial filter 
+   and then computes the eLORETA objective function. Because it is needed to run this function multiple times, 
+   and the process of computing the spatial filter from the NYC model is time-consuming, and the spatial filter 
+   is the same in each iteration, it is possible to compute it once. So the ft_inverse_eloreta function is 
+   separated into two parts. First, the filter is calculated (eLORETA_filt). All of the variables are given to 
+   the next function (ft_inverse_eloreta_inourcode) as input.
+
+#################################################################################################################
+
+10. ft_inverse_eloreta_inourcode:
+   - Input: All of the outputs of eLORETA_filt function
+   - Output: Dipoles' powers
+   
+   - Description: This is the rest of the ft_inverse_eloreta function of FieldTrip. It is modified to receive a 
+   square cross-spectral density matrix.
+
+#################################################################################################################
+
+11. Show_Result_Figure:
+   - Input: Dipoles' powers, Position of dipoles, a vector indicating which dipoles are inside the brain, 
+   triangles created by the dipoles
+   - Output: One individual figure to show the result on the NYC brain surface.
+   
+   - Description: This function receives a "vector" containing the power of each dipole (e.g., a 5004*1 matrix).
+   So it cannot be used to plot the figure of the output of the Spont_Analysis function directly. For example, an
+   average of the dipoles' powers can be calculated across all trials and frequency bins. Then, the resulting vector
+   can be plotted.
+
+#################################################################################################################
+
+12. Evoked_Data_Video:
+   - Input: Window length, Step of windows, Trial length, Sampling frequency, dipoles' powers
+   - Output: An interactive figure with a time slider to see the results of the dipoles' powers in order.
+   
+   - Description: This function receives "structs" containing the power of each dipole (e.g., 1000 structs in which 
+   pow is a 5004*1 vector). So it cannot be used to plot the figure of the output of the Evoked_Analysis function 
+   directly. For example, an average of the dipoles' powers can be calculated across all trials (and possibly frequency bins).
+   Then, the resulting struct can be plotted.
+   
+   *** This function is a modified version of the ft_sourceplot function of the FieldTrip toolbox. It is changed
+   somehow to be used with the uifigure and uislider functions of the MATLAB R2019b.
+
+#################################################################################################################
+
+13. ft_colormap_inourcode:
+   - Input: UI figure handle
+   - Output: Adds a colorbar to the UI figure
+   
+   - Description: This function is a modified version of the ft_colormap function. The only modification is that 
+   in line 138, the handle to the current figure is not the output of the gcf function. It is the figure handle 
+   which is received as an input. 
+   
+   *** This function is changed to be used with the uifigure and uislider functions of MATLAB R2019b.
+
+#################################################################################################################
+
+14. open_figure_inourcode:
+   - Input: Configuration variable
+   - Output: Creates a UI figure
+   
+   - Description: This function is a modified version of the open_figure function. It is modified to open 
+   a UI figure instead of a normal figure. 
+   
+   *** This function is changed to be used with the uifigure and uislider functions of MATLAB R2019b.
+		 
+		

@@ -1,0 +1,34 @@
+How to use the Main_Script:
+1. Download the NYC head model MATLAB structure from the following link:
+https://www.parralab.org/nyhead/sa_nyhead.mat
+
+2. Download the Fieldtrip toolbox (Our functions are compatible with version 2023-01-18 of the Fieldtrip toolbox)
+
+3. Find a sample EEG dataset in .edf format.
+
+4. RUn the Main_Script From the first section in order.
+
+##########################################################################################################
+
+CAUTIONS:
+
+1. The EEG data should be in .edf format. Otherwise, the code might not be able to read it.
+
+2. The EEG data should already be preprocessed. This code does not preprocess the data.
+
+3. If you are going to use the frequency analysis method (available in the Spont_Analysis function and the 
+first analysis type of the Evoked_Analysis function), ensure that the window length contains at least 3 
+periods of all desired frequencies. For example, to check the 10 Hz frequency, the window length must be 
+equal to or greater than 0.3 seconds.
+
+4. It is obvious that the trial length must be greater than the window length.
+
+5. If you are going to run the code multiple times in a for loop, consider that the MATLAB `
+save('variable name')` function might not be able to save large files, especially those larger than 2GB.
+
+6. In the timelock analysis (analysis type 2 of the Evoked_Analysis function), the mean of the covariance
+ matrices is not subtracted. In long window lengths, this action will make the data have zero mean in each
+ channel. This is not necessary because the data is assumed to be preprocessed previously, so a common 
+ average reference might have been used. Additionally, this will prevent the powers from being almost zero
+ when the window length is 1, 3, or 6 samples long. Thus, the result would be valid when we are about to 
+ have smaller windows. Consider this before using the scripts. (Line 213, Evoked_Analysis function)
