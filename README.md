@@ -26,8 +26,8 @@ other functions. The release of this repository includes functions from the Fiel
 under their respective licenses. Unauthorized copying and distribution of functions that are not explicitly 
 covered by the GPL is not allowed!
 
+########################################
 
-#############################################################################################################
 This repository contains new functions and some "modified" functions of an external toolbox, FieldTrip. It is 
 used to perform these steps in order:
 
