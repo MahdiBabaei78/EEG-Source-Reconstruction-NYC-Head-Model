@@ -1,4 +1,31 @@
-                    GNU GENERAL PUBLIC LICENSE
+EEG Source Reconstruction - NYC head model
+
+  Copyright (C) 2024 Mahdi Babaei, Bjorn Erik Juel
+
+This file is part of EEG Source Reconstruction - NYC head model, see 
+https://github.com/MahdiBabaei78/EEG-Source-Reconstruction-NYC-Head-Model 
+for the documentation and details.
+
+	EEG-Source-Reconstruction-NYC-Head-Model is a free software: you can redistribute
+	it and/or modifyit under the terms of the GNU General Public License as published 
+	by the Free Software Foundation, either version 3 of the License, or (at your option)
+	any later version.
+
+	EEG-Source-Reconstruction-NYC-Head-Model is distributed in the hope that it will be 
+	useful, but WITHOUT ANY WARRANTY; without even theimplied warranty of MERCHANTABILITY
+	or FITNESS FOR A PARTICULAR%    PURPOSE.  See the GNU General Public License for more
+	details.You should have received a copy of the GNU General Public Licensealong with 
+	EEG-Source-Reconstruction-NYC-Head-Model. If not, see <http://www.gnu.org/licenses/>.
+ 
+Contact:
+Mahdi Babaei
+Dept. of Electrical Engineering, Sharif University of Technology, Tehran, Iran
+
+Email: 	mahdi78babaei@gmail.com
+	mahdi.babaei@sharif.edu
+
+#########################################################################################
+                      GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
