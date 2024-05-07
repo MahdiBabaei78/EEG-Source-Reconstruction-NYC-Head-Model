@@ -77,7 +77,7 @@ for j = 1:length(events_name)
     disp(['Event ',num2str(j),': ',events_name{j}])
     index_events{j} = [];
     for i = 1:length(EEG.event) 
-        if (strcmp(events_name{j},EEG.event(i).type))
+        if (strcmp(events_name{j},EEG.event(i).value))
            index_events{j} = [index_events{j},i]; 
         end
     end
