@@ -42,6 +42,9 @@ function Show_Result_Figure(dippow, pos, inside, tri)
 % $Id$
 
 
+temp = dippow;
+dippow = [];
+dippow.pow = temp;
 max_pow            = max(dippow.pow);
 min_pow            = min(dippow.pow);
 dippow.inside      = inside;
