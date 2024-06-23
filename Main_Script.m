@@ -64,7 +64,7 @@ suf = [];
 Show_EEGdata_Channels(D_n, D_p);
 prestim             = 1;
 poststim            = 1;
-[eventtype, events_name, index_events] = Show_EEGdata_Events('G:\Daneshgah\Internship Juel\Last Code\EEG files','SUB_1001_noload_p3b.edf', prestim, poststim);
+[eventtype, events_name, index_events] = Show_EEGdata_Events(D_n,D_p, prestim, poststim);
 %%
 winlen              = 1;
 stepwin             = 0.05;
