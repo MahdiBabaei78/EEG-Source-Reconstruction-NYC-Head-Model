@@ -36,7 +36,7 @@ function [eventtype, events_name, index_events] = Show_EEGdata_Events(D_n, D_p, 
 
 
 
-[EEG,EEG.event] = edf2fieldtrip('G:\Daneshgah\Internship Juel\Last Code\EEG files\SUB_1001_noload_p3b.edf');
+[EEG,EEG.event] = edf2fieldtrip([D_p,D_n]);
 
 
 event = EEG.event;
